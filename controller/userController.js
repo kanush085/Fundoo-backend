@@ -42,7 +42,7 @@ exports.registration = (req, res) => {
         response.error = errors;
         return res.status(422).send(response);
     } else {
-        var obj = { firstname: req.body.firstname, lastname: req.body.lastname,email:req.body.email,password: req.body.password }
+        var obj = { firstname: req.body.firstname, lastname: req.body.lastname, email: req.body.email, password: req.body.password }
         userService.registration(obj, (err, result) => {
             if (err) {
                 console.log(err);
@@ -82,6 +82,8 @@ exports.login = (req, res) => {
         else {
             var obj = { email: req.body.email, password: req.body.password }
             userService.login(obj, (err, result) => {
+                console.log("********************************",result);
+                
                 if (err) {
                     return res.status(500).send({
                         message: err
@@ -100,6 +102,7 @@ exports.login = (req, res) => {
                     response._id = result[0]._id;
                     response.token = obj;
                     response.name = result[0].firstname;
+                    response.image=result[0].profilePic;
                     console.log("result", result);
 
 
@@ -146,13 +149,13 @@ exports.forgotPassword = (req, res) => {
                     response.success = result;
                     // console.log("data in controller========>", result[0]._id);
                     const payload = {
-                        user_id:result._id
+                        user_id: result._id
                     }
                     console.log("payload==>", payload);
                     const obj = util.generateToken(payload)
                     console.log("controller obj", obj);
 
-                    const url = `http://localhost:3000/resetPassword/${obj.token}`;
+                    const url = `http://localhost:4200/resetpassword/${obj.token}`;
 
                     console.log("url in contoller==>", url);
 
@@ -212,4 +215,34 @@ exports.resetPassword = (req, res) => {
     } catch (error) {
         res.send(error)
     }
+}
+
+
+
+
+exports.setProfilePic = (req, res) => {
+    try {
+
+        
+        console.log("inside setProfile pic ");
+        console.log("userid", req.decoded.payload.user_id);
+        var response = {}
+        userid = req.decoded.payload.user_id;
+        let image = (req.file.location)
+        userService.setProfilePic(userid, image, (err, result) => {
+            if (err) {
+                response.status = false;
+                response.error = err;
+                return res.status(500).send(response)
+            } else {
+                response.status = true;
+                response.data = result;
+                return res.status(200).send(response)
+            }
+        })
+    } catch (error) {
+        res.send(error)
+    }
+
+
 }

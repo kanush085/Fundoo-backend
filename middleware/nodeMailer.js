@@ -14,6 +14,8 @@
 const nodemailer = require('nodemailer');
 
 exports.sendEMailFunction = (url) => {
+    console.log(url);
+    
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -30,7 +32,7 @@ exports.sendEMailFunction = (url) => {
 
             subject: 'ResetPassword',
 
-            text: ' verifaction link is:\n\n' + url
+            text: ' verifaction link is:\n\n' + url+""
         };
 
         transporter.sendMail(mailOptions, (err, info) => {

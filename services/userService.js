@@ -72,3 +72,14 @@ exports.resetPassword = (req, callBack) => {
         }
     })
 }
+
+exports.setProfilePic = (userid,image, callBack) => {
+    userModel.setProfilePic(userid,image, (err, result) => {
+        if (err) {
+            return callBack(err);
+        }
+        else {
+            return callBack(null, result)
+        }
+    })
+}

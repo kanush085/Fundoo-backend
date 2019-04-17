@@ -29,6 +29,9 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String, require: [true, "password require"]
     },
+    profilePic: {
+        type: String,
+    }
 },
     {
         timestamps: true
@@ -175,5 +178,32 @@ userModel.prototype.updatePassword = (req, callBack) => {
         console.log(error.message);
 
     }
+}
+
+
+
+
+
+
+
+userModel.prototype.setProfilePic = (userid, image,callBack) => {
+
+    user.findOneAndUpdate({
+
+        _id: userid
+    },
+        {
+            $set: {
+                profilePic: image
+            }
+        }, (err, result) => {
+            if (err) {
+                callBack(err)
+            }
+            else {
+                console.log("updated image successfully")
+                return callBack(null, image)
+            }
+        })
 }
 module.exports = new userModel;
