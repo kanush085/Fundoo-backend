@@ -235,6 +235,8 @@ exports.setProfilePic = (req, res) => {
                 response.error = err;
                 return res.status(500).send(response)
             } else {
+                // console.log(result);
+                
                 response.status = true;
                 response.data = result;
                 return res.status(200).send(response)
