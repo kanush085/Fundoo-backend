@@ -159,4 +159,15 @@ exports.doPinned = (noteID, doPinned, callback) => {
     })
 
 }
+exports.reminder = (noteID, reminderNote, callback) => {
+    // console.log("came in reminder",noteID);
+    noteModel.reminder(noteID, reminderNote, (err, result) => {
+        if (err) {
+            callback(err);
+        } else {
+            return callback(null, result)
+        }
 
+    })
+
+}

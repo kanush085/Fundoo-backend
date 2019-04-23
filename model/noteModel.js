@@ -257,5 +257,24 @@ noteModel.prototype.doPinned = (noteID, doPinned, callback) => {
 
 
 
+noteModel.prototype.reminder=(noteID,reminderNote,callback)=>{
+    console.log("came to reminder model");
+    note.findOneAndUpdate({
+        _id:noteID
+    },{
+        $set:{
+            reminder:reminderNote
+        }
+    },(err,result)=>{
+        if(err)
+        {
+            callback(err)
+        }else{
+            return callback(null,reminderNote)
+        }
+    })
+    
+}
+
 
 module.exports = new noteModel();

@@ -30,4 +30,6 @@ router.put('/updateColor', middleware.checkTokenAuth, noteController.updateColor
 router.put('/editTitle', middleware.checkTokenAuth, noteController.editTitle)
 router.put('/editDescription', middleware.checkTokenAuth, noteController.editDescription)
 router.put('/doPinned', middleware.checkTokenAuth, noteController.doPinned)
+
+router.put('/reminder',middleware.checkTokenAuth,noteController.reminder)
 module.exports = router;
