@@ -295,8 +295,7 @@ exports.editDescription = (req, res) => {
  */
 exports.doPinned = (req, res) => {
     try {
-        // console.log("id", req.body.noteID);
-
+     
         req.checkBody('noteID', 'noteId is required').not().isEmpty();
         var response = {}
         var errors = req.validationErrors();
