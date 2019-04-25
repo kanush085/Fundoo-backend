@@ -52,5 +52,15 @@ mongoose.connect(dbConfig.url, {
 }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
-});                                                 
+});   
+
+// var schedule = require('node-schedule');
+ 
+// var j = schedule.scheduleJob('*/5 * * * * *', function(){
+//   console.log('The answer to life, the universe, and everything!');
+// });
+
+
+
+
 module.exports = app;

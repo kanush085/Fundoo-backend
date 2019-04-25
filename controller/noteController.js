@@ -295,7 +295,7 @@ exports.editDescription = (req, res) => {
  */
 exports.doPinned = (req, res) => {
     try {
-     
+
         req.checkBody('noteID', 'noteId is required').not().isEmpty();
         var response = {}
         var errors = req.validationErrors();
@@ -341,8 +341,8 @@ exports.reminder = (req, res) => {
         }
         else {
             var noteID = req.body.noteID;
-            var reminderNote=req.body.reminder
-            noteService.reminder(noteID,reminderNote, (err, result) => {
+            var reminderNote = req.body.reminder
+            noteService.reminder(noteID, reminderNote, (err, result) => {
                 var responseResult = {}
                 if (err) {
                     responseResult.status = false;
@@ -362,7 +362,60 @@ exports.reminder = (req, res) => {
         res.send(error)
     }
 
-
-
-
 }
+exports.pushNotification = (req, res) => {
+    console.log("REQ IS ++++++++++++++++++",req);
+    
+    req.checkBody("userId", "userId is required").not().isEmpty();
+    var responseResult = {}
+    var errors = req.validationErrors()
+    if (errors) {
+        responseResult.status = false;
+        responseResult.error = errors
+        return res.status(422).send(responseResult)
+    }
+    else {
+        
+        noteService.pushNotification(req, (err, result) => {
+            var response = {}
+            if (err) {
+                response.status = false;
+                response.error = err
+                return res.status(500).send(response)
+            } else {
+                response.status = true;
+                response.data = result;
+                return res.status(200).send(response)
+            }
+        })
+    }
+}
+
+exports.sendNotification = (req, res) => {
+    // req.checkBody("userId", "userId is required").not().isEmpty();
+    var responseResult = {}
+    var errors = req.validationErrors()
+    if (errors) {
+        responseResult.status = false;
+        responseResult.error = errors
+        return res.status(422).send(responseResult)
+    }
+    else {
+    var obj =req.params.userId
+    console.log("USER IS +++",obj);
+    
+        noteService.sendNotification(obj, (err, result) => {
+            var response = {}
+            if (err) {
+                response.status = false;
+                response.error = err
+                return res.status(500).send(response)
+            } else {
+                response.status = true;
+                response.data = result;
+                return res.status(200).send(response)
+            }
+        })
+    }
+}
+

@@ -1,4 +1,6 @@
 const noteModel = require('../model/noteModel');
+const notepush = require('../sendNotification')
+const notifyModel = require('../model/pushNotificationModel')
 /**
  * 
  * @param {*} data 
@@ -165,6 +167,37 @@ exports.reminder = (noteID, reminderNote, callback) => {
         if (err) {
             callback(err);
         } else {
+            return callback(null, result)
+        }
+
+    })
+
+}
+
+
+
+exports.pushNotification = (req, callBack) => {
+    // console.log("came in reminder",noteID);
+    notifyModel.pushNotification(req, (err, result) => {
+        if (err) {
+            callBack(err);
+        } else {
+            return callBack(null, result)
+        }
+
+    })
+
+}
+
+
+exports.sendNotification = (obj, callback) => {
+    // console.log("came in reminder",noteID);
+    notifyModel.sendNotification(obj, (err, result) => {
+        if (err) {
+            callback(err);
+        } else {
+
+            notepush.sendNotification(result)
             return callback(null, result)
         }
 

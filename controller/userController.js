@@ -66,7 +66,6 @@ exports.registration = (req, res) => {
 
 exports.login = (req, res) => {
     try {
-        console.log("req in controller", req.body);
         req.checkBody('email', 'Email is not valid').isEmail();
         req.checkBody('password', 'password is not valid').isLength({ min: 4 });
         console.log("----------------------");
@@ -79,10 +78,16 @@ exports.login = (req, res) => {
             response.error = errors;
             return res.status(422).send(response);
         }
-        else {
-            var obj = { email: req.body.email, password: req.body.password }
+        else {  
+            var obj = { 
+                email: req.body.email, 
+                password: req.body.password,
+                firebasetoken:req.body.firebasetoken
+             }
+             console.log("obj",obj);
+             
             userService.login(obj, (err, result) => {
-                console.log("********************************",result);
+                // console.log("********************************",result);
                 
                 if (err) {
                     return res.status(500).send({

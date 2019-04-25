@@ -32,4 +32,7 @@ router.put('/editDescription', middleware.checkTokenAuth, noteController.editDes
 router.put('/doPinned', middleware.checkTokenAuth, noteController.doPinned)
 
 router.put('/reminder',middleware.checkTokenAuth,noteController.reminder)
+
+router.post('/pushNotification',middleware.checkTokenAuth,noteController.pushNotification)
+router.get('/sendNotification/:userId',noteController.sendNotification)
 module.exports = router;
