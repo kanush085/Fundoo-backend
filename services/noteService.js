@@ -204,3 +204,43 @@ exports.sendNotification = (obj, callback) => {
     })
 
 }
+
+
+exports.checkForReminder = () => {
+    // var date = new Date()
+    // var date1 = new Date()
+    // var d4 = '8:00PM'
+    // var d5 = '8:01PM'
+    noteModel.getAllUser((err, result) => {
+
+        if (err) {
+            console.log(err);
+
+        } else {
+            if (Array.isArray(result)) {
+                console.log("RESULT IS ", result);
+                var userId = result[0].userId
+                console.log(userId, "314564354354356464646");
+                notifyModel.sendNotification(userId, (err, result) => {
+                    if (err) {
+                        callBack(err);
+                    } else {
+
+
+                      notepush.sendNotification(result)
+                        //return callBack(null, result)
+                    }
+                })
+
+            } else {
+                console.log("notes in reminder", result);
+            }
+
+
+        }
+
+    })
+    // console.log("ngahafagahagagafa",d5);
+
+}
+

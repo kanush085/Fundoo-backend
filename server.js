@@ -8,6 +8,7 @@
 const route = require('./routes/routes')
 const express = require('express')
 const bodyParser = require('body-parser');
+const note=require('./services/noteService')
 /**
  * Configuring the database.
  */
@@ -54,11 +55,14 @@ mongoose.connect(dbConfig.url, {
     process.exit();
 });   
 
-// var schedule = require('node-schedule');
+var schedule = require('node-schedule');
  
-// var j = schedule.scheduleJob('*/5 * * * * *', function(){
+var j = schedule.scheduleJob('*/1 * * * * ', function(){
+
+
+    note.checkForReminder()
 //   console.log('The answer to life, the universe, and everything!');
-// });
+});
 
 
 

@@ -206,4 +206,18 @@ userModel.prototype.setProfilePic = (userid, image,callBack) => {
             }
         })
 }
+
+
+
+
+// userModel.prototype.getAllUser = (req, callBack) => {
+//     user.find({}, (err, result) => {
+//         if (err) {
+//             callBack(err);
+//         }
+//         else {
+//             callBack(null, result)
+//         }
+//     });
+// }
 module.exports = new userModel;
