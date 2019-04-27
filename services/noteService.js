@@ -221,14 +221,22 @@ exports.checkForReminder = () => {
                 console.log("RESULT IS ", result);
                 var userId = result[0].userId
                 console.log(userId, "314564354354356464646");
-                notifyModel.sendNotification(userId, (err, result) => {
+                notifyModel.sendNotification(userId, (err, token) => {
                     if (err) {
                         callBack(err);
                     } else {
 
+                        result.forEach(value => {
 
-                      notepush.sendNotification(result)
-                        //return callBack(null, result)
+                            var payload = {
+                                notification: {
+                                    title: value.title,
+                                    body: value.description
+                                }
+                            }
+                            notepush.sendNotification(token, payload)
+                            //return callBack(null, result)
+                        });
                     }
                 })
 

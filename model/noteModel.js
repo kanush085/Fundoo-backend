@@ -238,8 +238,8 @@ noteModel.prototype.editDescription = (noteID, updateDescription, callback) => {
  */
 
 noteModel.prototype.doPinned = (noteID, doPinned, callback) => {
-    console.log("in model pinned",noteID,doPinned);
-    
+    console.log("in model pinned", noteID, doPinned);
+
     note.findOneAndUpdate({
         _id: noteID
     }, {
@@ -257,78 +257,47 @@ noteModel.prototype.doPinned = (noteID, doPinned, callback) => {
 
 
 
-noteModel.prototype.reminder=(noteID,reminderNote,callback)=>{
+noteModel.prototype.reminder = (noteID, reminderNote, callback) => {
     console.log("came to reminder model");
     note.findOneAndUpdate({
-        _id:noteID
-    },{
-        $set:{
-            reminder:reminderNote
-        }
-    },(err,result)=>{
-        if(err)
-        {
-            callback(err)
-        }else{
-            return callback(null,reminderNote)
-        }
-    })
-    
+        _id: noteID
+    }, {
+            $set: {
+                reminder: reminderNote
+            }
+        }, (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                return callback(null, reminderNote)
+            }
+        })
+
 }
 
-noteModel.prototype.getAllUser = (callBack) => {
-    // console.log(d4);
-    // console.log(d5);  
+noteModel.prototype.getAllUser = (callBack) => { 
     note.find((err, result) => {
         if (err) {
             callBack(err);
         }
         else {
-            // console.log("dhhjashdghsjdhkashdksdljadjklasjldjklsdklsjdl",result);
-            const reminder=[]
-            var event = new Date();
-            correct=new Date();
-            const min=event.getMinutes()+1;
-            date=event.setMinutes(min);
-            
-            result.forEach(function(value){
+            const reminder = []
+            var d = new Date();
+            const date = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()).toJSON();
 
-
-                if(value.reminder.length>0){
-                    const time=new Date(value.reminder);
-
-                  if(time>correct){
-
-                    console.log('first',time.getMinutes(),'       ',correct.getMinutes(),'      ',event);
-                  }
-
-              if(time>=correct && time<=event){
-                  console.log('correct');
-                  reminder.push(value);
-                  
-              }
-
-
-
-                //   if(event>=time){
-
-                //     console.log('second',correct.getMinutes(),'       ',event.getMinutes(),'      ',time.getMinutes());
-
-                //   }
+            result.forEach(function (value) {
+                if (value.reminder == date) {
+                    console.log('correct');
+                    reminder.push(value);
                 }
-                
-                // console.log("1111111111111111111111111",new Date(value.reminder) ,'  ',event.getMinutes(),'    ',new Date().getMinutes(),'       ',event.getDate());
-            
-                
-
             })
-            console.log("ghsdashdkhdkjh",reminder.length);
-            if(reminder.length>0){
+            console.log("Reminder length", reminder.length);
+            if (reminder.length > 0) {
                 callBack(null, reminder)
             }
-           else{
-               callBack(null, "No reminders found")
-           }
+            else {
+                callBack(null, "No reminders found")
+            }
         }
     });
 }

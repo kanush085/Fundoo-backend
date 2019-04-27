@@ -9,12 +9,12 @@ admin.initializeApp({
 
 // var registerationToken = "cNUr19maEwg:APA91bH0iBSwifLw_EPnr8EDn6Ixt-2Rn99a2VaoufaQq7fhSvjOfTp4omyzeV-v1az70Xi3hfy-xf1AZbw4o9eZ_9pCehEozZrAv8DILYc1yMibNfy9Pe02I4F53xKJCrZ2KsrHHJ8I"
 
-var payload = {
-    notification: {
-        title: 'hello',
-        body: 'how r u'
-    }
-}
+// var payload = {
+//     notification: {
+//         title: 'hello',
+//         body: 'how r u'
+//     }
+// }
 
 var options = {
     priority: "normal",
@@ -23,7 +23,7 @@ var options = {
 
 module.exports = {
 
-    sendNotification(token) {
+    sendNotification(token,payload) {
 
         console.log('send notification ' ,payload);
         

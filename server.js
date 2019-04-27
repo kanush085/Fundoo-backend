@@ -8,19 +8,19 @@
 const route = require('./routes/routes')
 const express = require('express')
 const bodyParser = require('body-parser');
-const note=require('./services/noteService')
+const note = require('./services/noteService')
 /**
  * Configuring the database.
  */
 const app = express();
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-   
-   next();
-  });
+
+    next();
+});
 
 app.use(bodyParser.urlencoded({ extended: true }))
 /**
@@ -53,15 +53,15 @@ mongoose.connect(dbConfig.url, {
 }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
-});   
+});
 
 var schedule = require('node-schedule');
- 
-var j = schedule.scheduleJob('*/1 * * * * ', function(){
+
+var j = schedule.scheduleJob('*/1 * * * * ', function () {
 
 
     note.checkForReminder()
-//   console.log('The answer to life, the universe, and everything!');
+    //   console.log('The answer to life, the universe, and everything!');
 });
 
 

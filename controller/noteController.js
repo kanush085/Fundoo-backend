@@ -364,7 +364,7 @@ exports.reminder = (req, res) => {
 
 }
 exports.pushNotification = (req, res) => {
-    console.log("REQ IS ++++++++++++++++++",req);
+    // console.log("REQ IS ++++++++++++++++++",req);
     
     req.checkBody("userId", "userId is required").not().isEmpty();
     var responseResult = {}
