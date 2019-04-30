@@ -365,7 +365,7 @@ exports.reminder = (req, res) => {
 }
 exports.pushNotification = (req, res) => {
     // console.log("REQ IS ++++++++++++++++++",req);
-    
+
     req.checkBody("userId", "userId is required").not().isEmpty();
     var responseResult = {}
     var errors = req.validationErrors()
@@ -375,7 +375,7 @@ exports.pushNotification = (req, res) => {
         return res.status(422).send(responseResult)
     }
     else {
-        
+
         noteService.pushNotification(req, (err, result) => {
             var response = {}
             if (err) {
@@ -401,9 +401,9 @@ exports.sendNotification = (req, res) => {
         return res.status(422).send(responseResult)
     }
     else {
-    var obj =req.params.userId
-    console.log("USER IS +++",obj);
-    
+        var obj = req.params.userId
+        console.log("USER IS +++", obj);
+
         noteService.sendNotification(obj, (err, result) => {
             var response = {}
             if (err) {
@@ -420,3 +420,62 @@ exports.sendNotification = (req, res) => {
 
 }
 
+
+
+exports.createLabel = (req, res) => {
+    req.checkBody("userId", "userId is required").not().isEmpty();
+
+    var responseResult = {}
+    var errors = req.validationErrors()
+    if (errors) {
+        responseResult.status = false;
+        responseResult.error = errors
+        return res.status(422).send(responseResult)
+
+    } else {
+        var response = {}
+        // var userID=req.decoded.payload.user_id
+        // var label=req.body.label
+        noteService.createLabel(req, (err, result) => {
+            if (err) {
+                response.status = false;
+                response.error = err
+                return res.status(500).send(response)
+
+            }
+            else {
+                response.status = true;
+                response.data = result;
+                return res.status(200).send(response)
+            }
+        })
+    }
+}
+
+
+exports.getLabel = (req, res) => {
+    // req.checkBody("userId", "userId is required").not().isEmpty();
+    var responseResult = {}
+    var errors = req.validationErrors()
+    if (errors) {
+        responseResult.status = false;
+        responseResult.error = errors
+        return res.status(422).send(responseResult)
+
+    } else {
+        var response = {}
+        noteService.getLabel(req, (err, result) => {
+            if (err) {
+                response.status = false;
+                response.error = err
+                return res.status(500).send(response)
+
+            } else {
+                response.status = true;
+                response.data = result;
+                return res.status(200).send(response)
+            }
+        })
+
+    }
+}

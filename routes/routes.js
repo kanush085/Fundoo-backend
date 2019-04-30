@@ -31,8 +31,21 @@ router.put('/editTitle', middleware.checkTokenAuth, noteController.editTitle)
 router.put('/editDescription', middleware.checkTokenAuth, noteController.editDescription)
 router.put('/doPinned', middleware.checkTokenAuth, noteController.doPinned)
 
-router.put('/reminder',middleware.checkTokenAuth,noteController.reminder)
+router.put('/reminder', middleware.checkTokenAuth, noteController.reminder)
 
-router.post('/pushNotification',middleware.checkTokenAuth,noteController.pushNotification)
-router.get('/sendNotification/:userId',noteController.sendNotification)
+router.post('/pushNotification', middleware.checkTokenAuth, noteController.pushNotification)
+// router.get('/sendNotification/:userId',noteController.sendNotification)
+
+
+
+//////////////////////// labels //////////////////////
+router.post('/createLabel', middleware.checkTokenAuth, noteController.createLabel)
+
+router.get('/getLabel', middleware.checkTokenAuth, noteController.getLabel)
+
+
+
+
+
+
 module.exports = router;

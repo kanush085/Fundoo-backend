@@ -275,7 +275,7 @@ noteModel.prototype.reminder = (noteID, reminderNote, callback) => {
 
 }
 
-noteModel.prototype.getAllUser = (callBack) => { 
+noteModel.prototype.getAllUser = (callBack) => {
     note.find((err, result) => {
         if (err) {
             callBack(err);
@@ -301,5 +301,59 @@ noteModel.prototype.getAllUser = (callBack) => {
         }
     });
 }
+
+
+
+
+
+
+
+var labelSchema = new mongoose.Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        required: [true, "User_id  required"]
+    },
+
+    label: {
+        type: String,
+        required: [true, "Label required"]
+    }
+},
+    {
+        timestamps: true
+    });
+
+var label = mongoose.model('Label', labelSchema)
+
+
+noteModel.prototype.createLabel = (objectLabel, callBack) => {
+    const lableModel = new label(objectLabel.body)
+
+    lableModel.save((err, result) => {
+        if (err) {
+            console.log("Model not found");
+            callBack(err)
+
+        } else {
+            console.log("Label added successfully");
+            callBack(null, result)
+
+        }
+    })
+}
+
+noteModel.prototype.getLabel = (req, callBack) => {
+    label.find({
+        userId: req.decoded.payload.user_id
+    }, (err, result) => {
+        if (err) {
+            callBack(err)
+        } else {
+            callBack(null, result)
+        }
+    })
+}
+
+
 
 module.exports = new noteModel();

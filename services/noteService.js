@@ -207,10 +207,7 @@ exports.sendNotification = (obj, callback) => {
 
 
 exports.checkForReminder = () => {
-    // var date = new Date()
-    // var date1 = new Date()
-    // var d4 = '8:00PM'
-    // var d5 = '8:01PM'
+
     noteModel.getAllUser((err, result) => {
 
         if (err) {
@@ -252,3 +249,33 @@ exports.checkForReminder = () => {
 
 }
 
+
+
+exports.createLabel = (req, callBack) => {
+
+
+    noteModel.createLabel(req, (err, result) => {
+        if (err) {
+            callBack(err);
+        } else {
+            return callBack(null, result)
+        }
+    })
+
+}
+
+
+
+
+exports.getLabel = (req, callBack) => {
+
+
+    noteModel.getLabel(req, (err, result) => {
+        if (err) {
+            callBack(err);
+        } else {
+            return callBack(null, result)
+        }
+    })
+
+}
