@@ -355,5 +355,39 @@ noteModel.prototype.getLabel = (req, callBack) => {
 }
 
 
+noteModel.prototype.deleteLabel = (labelID, callBack) => {
+    console.log("came to delete label model");
+
+    label.deleteOne({ _id: labelID }, (err, result) => {
+        if (err) {
+            callBack(err)
+        } else {
+            const body = {
+                status: true,
+                msg: "label deleted successfully"
+            }
+            return callBack(null, body)
+        }
+    })
+
+}
+
+
+
+noteModel.prototype.editLabel = (labelID, updateLabel, callBack) => {
+    label.findOneAndUpdate({
+        _id: labelID
+    }, {
+            $set: {
+                label: updateLabel
+            }
+        }, (err, result) => {
+            if (err) {
+                callBack(err)
+            } else {
+                return callBack(null, updateLabel)
+            }
+        })
+}
 
 module.exports = new noteModel();

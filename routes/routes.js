@@ -43,6 +43,8 @@ router.post('/createLabel', middleware.checkTokenAuth, noteController.createLabe
 
 router.get('/getLabel', middleware.checkTokenAuth, noteController.getLabel)
 
+router.post('/deleteLabel', middleware.checkTokenAuth, noteController.deleteLabel)
+router.put('/editLabel', middleware.checkTokenAuth, noteController.editLabel)
 
 
 

@@ -224,8 +224,6 @@ exports.updateColor = (req, res) => {
  */
 exports.editTitle = (req, res) => {
     try {
-        // console.log(req);
-
         req.checkBody("noteID", "noteID is required").not().isEmpty();
         var response = {}
         var errors = req.validationErrors();
@@ -455,27 +453,105 @@ exports.createLabel = (req, res) => {
 
 exports.getLabel = (req, res) => {
     // req.checkBody("userId", "userId is required").not().isEmpty();
-    var responseResult = {}
-    var errors = req.validationErrors()
-    if (errors) {
-        responseResult.status = false;
-        responseResult.error = errors
-        return res.status(422).send(responseResult)
+    try {
 
-    } else {
+        var responseResult = {}
+        var errors = req.validationErrors()
+        if (errors) {
+            responseResult.status = false;
+            responseResult.error = errors
+            return res.status(422).send(responseResult)
+
+        } else {
+            var response = {}
+            noteService.getLabel(req, (err, result) => {
+                if (err) {
+                    response.status = false;
+                    response.error = err
+                    return res.status(500).send(response)
+
+                } else {
+                    response.status = true;
+                    response.data = result;
+                    return res.status(200).send(response)
+                }
+            })
+
+        }
+
+
+
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+
+
+exports.deleteLabel = (req, res) => {
+    try {
+
+        req.checkBody("labelID", "label ID is required").not().isEmpty();
+        var errors = req.validationErrors();
         var response = {}
-        noteService.getLabel(req, (err, result) => {
-            if (err) {
-                response.status = false;
-                response.error = err
-                return res.status(500).send(response)
+        if (errors) {
+            response.status = false;
+            response.error = errors
+            return res.status(422).send(response)
+        }
+        else {
+            var responseResult = {}
+            labelID = req.body.labelID;
+            noteService.deleteLabel(labelID, (err, result) => {
+                if (err) {
+                    responseResult.status = false
+                    responseResult.error = err;
 
-            } else {
-                response.status = true;
-                response.data = result;
-                return res.status(200).send(response)
-            }
-        })
+                    return res.status(500).send(responseResult)
+                }
+                else {
+                    responseResult.status = true;
+                    responseResult.data = result;
+                    return res.status(200).send(responseResult)
 
+                }
+            })
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+
+exports.editLabel = (req, res) => {
+    try {
+        req.checkBody("labelID", "label is required");
+        var response = {}
+        var errors = req.validationErrors()
+        if (errors) {
+            response.status = false;
+            response.error = errors
+            return res.status(422).send(response)
+        }
+        else {
+            var responseResult = {}
+            labelID = req.body.labelID;
+            updateLabel=req.body.label;
+            noteService.editLabel(labelID,updateLabel, (err, result) => {
+                if (err) {
+                    responseResult.status = false;
+                    responseResult.error = err;
+                    return res.status(500).send(responseResult)
+                }
+                else {
+                    responseResult.status = true;
+                    responseResult.data = result
+                    return res.status(200).send(responseResult)
+                }
+            })
+        }
+
+    } catch (error) {
+        res.send(error)
     }
 }

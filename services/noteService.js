@@ -279,3 +279,33 @@ exports.getLabel = (req, callBack) => {
     })
 
 }
+
+
+
+
+exports.deleteLabel = (labelID, callback) => {
+    console.log("came to delete label service");
+    noteModel.deleteLabel(labelID, (err, result) => {
+        if (err) {
+            callback(err);
+        } else {
+            return callback(null, result)
+        }
+    })
+
+}
+
+
+
+
+exports.editLabel = (labelID, updateLabel, callback) => {
+    console.log("came to editTitle note service");
+    noteModel.editLabel(labelID, updateLabel, (err, result) => {
+        if (err) {
+            callback(err);
+        } else {
+            return callback(null, result)
+        }
+    })
+
+}
