@@ -33,6 +33,12 @@ var noteSchema = new mongoose.Schema({
     trash: {
         type: Boolean
     },
+    label: [
+        {
+            type: String,
+            ref: "labelSchema"
+        }
+    ]
 }, {
         timestamps: true
     });
@@ -44,11 +50,7 @@ function noteModel() { }
  * @param {*response to backend} callback 
  */
 noteModel.prototype.addNotes = (objectNote, callback) => {
-    // console.log("data====>", objectNote.body);
-    // let object={
-    //     "title":objectNote.title,
-    //     "description":objectNote.description
-    // }
+   
     const noteModel = new note(objectNote.body);
     console.log("data==================>", objectNote.body);
     //To save the data in dbs
@@ -69,9 +71,6 @@ noteModel.prototype.addNotes = (objectNote, callback) => {
  * @param {*response to backend} callback 
  */
 noteModel.prototype.getNotes = (id, callback) => {
-    // console.log("---------------------",id.decoded.payload.user_id);
-    // console.log(id);
-
     note.find({
         userId: id.decoded.payload.user_id
 
@@ -386,6 +385,43 @@ noteModel.prototype.editLabel = (labelID, updateLabel, callBack) => {
                 callBack(err)
             } else {
                 return callBack(null, updateLabel)
+            }
+        })
+}
+
+
+noteModel.prototype.saveLabel = (noteID, noteLabel, callBack) => {
+    note.findOneAndUpdate({
+        _id: noteID
+    }, {
+            $push: {
+                label: noteLabel
+            }
+        }, (err, result) => {
+            if (err) {
+
+                callBack(err)
+            } else {
+                return callBack(null, noteLabel)
+            }
+        })
+}
+
+
+
+noteModel.prototype.deleteNoteLabel = (noteID, deletelabel, callBack) => {
+    note.findOneAndUpdate({
+        _id: noteID
+    }, {
+            $pull: {
+                label: deletelabel
+            }
+        }, (err, result) => {
+            if (err) {
+
+                callBack(err)
+            } else {
+                return callBack(null, deletelabel)
             }
         })
 }

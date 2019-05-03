@@ -40,14 +40,16 @@ router.post('/pushNotification', middleware.checkTokenAuth, noteController.pushN
 
 //////////////////////// labels //////////////////////
 router.post('/createLabel', middleware.checkTokenAuth, noteController.createLabel)
-
 router.get('/getLabel', middleware.checkTokenAuth, noteController.getLabel)
-
 router.post('/deleteLabel', middleware.checkTokenAuth, noteController.deleteLabel)
 router.put('/editLabel', middleware.checkTokenAuth, noteController.editLabel)
-
+router.put('/saveLabel', middleware.checkTokenAuth, noteController.saveLabel)
+router.put('/deleteNoteLabel', middleware.checkTokenAuth, noteController.deleteNoteLabel)
 
 
 
 
 module.exports = router;
+
+
+

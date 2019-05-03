@@ -309,3 +309,24 @@ exports.editLabel = (labelID, updateLabel, callback) => {
     })
 
 }
+
+exports.saveLabel = (noteID, notelabel, callBack) => {
+    noteModel.saveLabel(noteID, notelabel, (err, result) => {
+        if (err) {
+            callBack(err)
+        } else {
+            return callBack(null, result)
+        }
+    })
+}
+
+
+exports.deleteNoteLabel = (noteID, deletelabel, callBack) => {
+    noteModel.deleteNoteLabel(noteID, deletelabel, (err, result) => {
+        if (err) {
+            callBack(err)
+        } else {
+            return callBack(null, result)
+        }
+    })
+}

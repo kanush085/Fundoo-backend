@@ -536,8 +536,8 @@ exports.editLabel = (req, res) => {
         else {
             var responseResult = {}
             labelID = req.body.labelID;
-            updateLabel=req.body.label;
-            noteService.editLabel(labelID,updateLabel, (err, result) => {
+            updateLabel = req.body.label;
+            noteService.editLabel(labelID, updateLabel, (err, result) => {
                 if (err) {
                     responseResult.status = false;
                     responseResult.error = err;
@@ -553,5 +553,74 @@ exports.editLabel = (req, res) => {
 
     } catch (error) {
         res.send(error)
+    }
+}
+
+
+exports.saveLabel = (req, res) => {
+    try {
+        req.checkBody("noteID", "noteID is required").not().isEmpty()
+        var response = {}
+        var errors = req.validationErrors()
+        if (errors) {
+            response.status = false;
+            response.error = errors
+            return res.status(422).send(response)
+        } else {
+            var responseResult = {}
+            var noteID = req.body.noteID;
+            var notelabel = req.body.label
+            noteService.saveLabel(noteID, notelabel, (err, result) => {
+                if (err) {
+                    responseResult.status = false;
+                    responseResult.error = err
+                    return res.status(500).send(responseResult)
+
+                }
+                else {
+                    responseResult.status = true;
+                    responseResult.data = result;
+
+                    return res.status(200).send(responseResult)
+                }
+            })
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+exports.deleteNoteLabel = (req, res) => {
+    try {
+        req.checkBody("noteID", "noteID is required").not().isEmpty()
+        var response = {}
+        var errors = req.validationErrors()
+        if (errors) {
+            response.status = false;
+            response.error = errors
+            return res.status(422).send(response)
+        } else {
+            var responseResult = {}
+            var noteID = req.body.noteID;
+            var deletelabel = req.body.label
+            noteService.deleteNoteLabel(noteID, deletelabel, (err, result) => {
+                if (err) {
+                    responseResult.status = false;
+                    responseResult.error = err
+                    return res.status(500).send(responseResult)
+
+                }
+                else {
+                    responseResult.status = true;
+                    responseResult.data = result;
+
+                    return res.status(200).send(responseResult)
+                }
+            })
+        }
+
+
+    } catch (error) {
+
     }
 }
