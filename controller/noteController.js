@@ -592,6 +592,8 @@ exports.saveLabel = (req, res) => {
 
 exports.deleteNoteLabel = (req, res) => {
     try {
+        console.log("label in deleet >>>>>>>>>>>>.",req.body.label);
+        
         req.checkBody("noteID", "noteID is required").not().isEmpty()
         var response = {}
         var errors = req.validationErrors()

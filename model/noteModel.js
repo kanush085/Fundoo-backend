@@ -410,6 +410,8 @@ noteModel.prototype.saveLabel = (noteID, noteLabel, callBack) => {
 
 
 noteModel.prototype.deleteNoteLabel = (noteID, deletelabel, callBack) => {
+    // console.log("jhdkjhdhj",noteID,">>>>>>>>>>>>>>>>>",deletelabel);
+    
     note.findOneAndUpdate({
         _id: noteID
     }, {
@@ -421,7 +423,21 @@ noteModel.prototype.deleteNoteLabel = (noteID, deletelabel, callBack) => {
 
                 callBack(err)
             } else {
-                return callBack(null, deletelabel)
+
+                let newArray=result.label
+                // console.log("new Array",newArray);
+
+                for(i=0;i<= newArray.length;i++)
+                {
+                    if(newArray[i]===deletelabel)
+                    {
+                        newArray.splice(i,1)
+                    }
+                }
+                console.log(newArray);
+                
+                
+                return callBack(null, newArray)
             }
         })
 }
