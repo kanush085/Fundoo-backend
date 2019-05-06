@@ -37,7 +37,6 @@ notificationModel.prototype.pushNotification = (req, callBack) => {
                 console.log("Push Notification added Successfully");
                 callBack(null, result);
             }
-
         })
 }
 
