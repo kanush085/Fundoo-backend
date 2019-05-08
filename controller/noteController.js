@@ -1,4 +1,11 @@
 const noteService = require('../services/noteService');
+ const rediscache = require('../redisCache')
+// const redis = require('redis');
+// const client = redis.createClient();
+// client.on('error', (err) => {
+//     console.log("Error " + err);
+// });
+
 /**
  * @description:it handles the creating note data
  * @param {*request from frontend} req 
@@ -45,33 +52,85 @@ exports.createNote = (req, res) => {
  * @param {*response from backend} res 
  */
 exports.getNotes = (req, res) => {
-    // console.log("============================"+req.body);
-    console.log("coming from frontend");
-
+    console.log("coming from frontend", req.decoded.payload.user_id);
     try {
         var response = {}
-        // console.log("in ctrl===========>",req);
-        // var obj={userId:req.body}
-        noteService.getNotes(req, (err, result) => {
+        var body = {
+            'userid': req.decoded.payload.user_id
+        }
+       
+        rediscache.redisgetNotes(body.userid, (err, result) => {
+            if (result) {
+                // console.log(result, "redis result");
 
+                const resultJSON = JSON.parse(result);
+                response.source = 'rediscache API'
+                response.message = 'Notes!'
+                response.data = resultJSON.resultJSON
+                return res.status(200).send(response)
 
-            if (err) {
-                response.status = false;
-                response.error = errors;
-                response.message = "not able to get notes"
-                return res.status(500).send(response);
-            }
-            else {
-                response.status = true;
-                response.message = "List of notes";
-                response.data = result;
-                res.status(200).send(response);
+            } else {
+                console.log("in redis else>>>>>>>>>>>>>>>>>.");
+
+                noteService.getNotes(body, (error, resultJSON) => {
+                    if (resultJSON) {
+                        rediscache.setredisNotes(body.userid, resultJSON)
+                        response.source = 'API'
+                        response.message = 'Here you go, all your notes!'
+                        response.data = resultJSON
+                        return res.status(200).send(response)
+
+                    } else {
+
+                        response.message = 'unable to get notes, it may be invalid user id',
+                        response.result = error
+                        return res.status(500).send(response)
+                        // res.status(500).send({
+                        //     message: 'unable to get notes, it may be invalid user id',
+                        //     result: error
+                        // })
+
+                    }
+                })
             }
         })
     } catch (error) {
+        console.log("catch", error);
 
     }
 }
+
+
+
+
+
+
+
+// exports.getNotes = (req, res) => {
+//     console.log("coming from frontend");
+
+//     try {
+//         var response = {}
+//         noteService.getNotes(req, (err, result) => {
+
+
+//             if (err) {
+//                 response.status = false;
+//                 response.error = errors;
+//                 response.message = "not able to get notes"
+//                 return res.status(500).send(response);
+//             }
+//             else {
+//                 response.status = true;
+//                 response.message = "List of notes";
+//                 response.data = result;
+//                 res.status(200).send(response);
+//             }
+//         })
+//     } catch (error) {
+
+//     }
+// }
 
 /**
  * @description:it handles the Archived note data
@@ -101,6 +160,7 @@ exports.isArchived = (req, res) => {
                     responseResult.error = err;
                     res.status(500).send(responseResult);
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     res.status(200).send(responseResult);
@@ -137,6 +197,7 @@ exports.isTrashed = (req, res) => {
                     responseResult.error = err;
                     res.status(500).send(responseResult);
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     res.status(200).send(responseResult);
@@ -171,6 +232,7 @@ exports.deleteNote = (req, res) => {
                     responseResult.error = err;
                     res.status(500).send(responseResult);
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     res.status(200).send(responseResult)
@@ -206,6 +268,7 @@ exports.updateColor = (req, res) => {
                     responseResult.error = err;
                     res.status(500).send(responseResult)
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     res.status(200).send(responseResult)
@@ -241,6 +304,7 @@ exports.editTitle = (req, res) => {
                     responseResult.error = err
                     return res.status(500).send(responseResult)
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     return res.status(200).send(responseResult)
@@ -275,6 +339,7 @@ exports.editDescription = (req, res) => {
                     responseResult.error = err
                     return res.status(500).send(responseResult)
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     return res.status(200).send(responseResult)
@@ -312,6 +377,7 @@ exports.doPinned = (req, res) => {
                     responseResult.error = err;
                     return res.status(500).send(responseResult)
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result
                     return res.status(200).send(responseResult)
@@ -347,6 +413,7 @@ exports.reminder = (req, res) => {
                     responseResult.error = err;
                     return res.status(500).send(responseResult);
                 } else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     return res.status(200).send(responseResult)
@@ -578,6 +645,7 @@ exports.saveLabel = (req, res) => {
 
                 }
                 else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
 
@@ -592,8 +660,8 @@ exports.saveLabel = (req, res) => {
 
 exports.deleteNoteLabel = (req, res) => {
     try {
-        console.log("label in deleet >>>>>>>>>>>>.",req.body.label);
-        
+        console.log("label in deleet >>>>>>>>>>>>.", req.body.label);
+
         req.checkBody("noteID", "noteID is required").not().isEmpty()
         var response = {}
         var errors = req.validationErrors()
@@ -613,6 +681,7 @@ exports.deleteNoteLabel = (req, res) => {
 
                 }
                 else {
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
 

@@ -9,6 +9,7 @@ const route = require('./routes/routes')
 const express = require('express')
 const bodyParser = require('body-parser');
 const note = require('./services/noteService')
+const responseTime = require('response-time')
 /**
  * Configuring the database.
  */
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 var expressValidator = require('express-validator')
 app.use(expressValidator());
 var cors = require('cors')
+app.use(responseTime());
 app.use(cors())
 app.use('/', route);
 app.get('/', (req, res) => {

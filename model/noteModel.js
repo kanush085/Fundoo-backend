@@ -70,9 +70,11 @@ noteModel.prototype.addNotes = (objectNote, callback) => {
  * @param {*request from frontend} id 
  * @param {*response to backend} callback 
  */
-noteModel.prototype.getNotes = (id, callback) => {
+noteModel.prototype.getNotes = (body, callback) => {
+    // console.log("hjjjjjjjjjjjj",body.userid);
+    
     note.find({
-        userId: id.decoded.payload.user_id
+        userId: body.userid
 
     }, (err, result) => {
 
@@ -138,7 +140,7 @@ noteModel.prototype.isTrashed = (noteID, trashNote, callback) => {
  * @param {*} callback 
  */
 noteModel.prototype.deleteNote = (noteID, callback) => {
-    console.log("came to model");
+    console.log("came to model delete note model");
     note.deleteOne({ _id: noteID }, (err, result) => {
         if (err) {
             callback(err)
