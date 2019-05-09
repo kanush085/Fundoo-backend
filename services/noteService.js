@@ -97,17 +97,31 @@ exports.deleteNote = (noteID, callback) => {
  * @param {*} color 
  * @param {*} callback 
  */
-exports.updateColor = (noteID, color, callback) => {
-    console.log("came to updateColor note service");
-    noteModel.updateColor(noteID, color, (err, result) => {
-        if (err) {
-            callback(err);
-        } else {
-            return callback(null, result)
-        }
+// exports.updateColor = (noteID, color, callback) => {
+//     console.log("came to updateColor note service");
+//     noteModel.updateColor(noteID, color, (err, result) => {
+//         if (err) {
+//             callback(err);
+//         } else {
+//             return callback(null, result)
+//         }
+//     })
+
+// }
+
+exports.updateColor = (noteID, color) => {
+    return new Promise(function (resolve, reject) {
+        noteModel.updateColor(noteID, color, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        })
     })
 
 }
+
 /**
  * 
  * @param {*} noteID 

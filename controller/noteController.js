@@ -1,5 +1,5 @@
 const noteService = require('../services/noteService');
- const rediscache = require('../redisCache')
+const rediscache = require('../redisCache')
 // const redis = require('redis');
 // const client = redis.createClient();
 // client.on('error', (err) => {
@@ -34,6 +34,7 @@ exports.createNote = (req, res) => {
                     var userNote = {
                         note: result,
                     }
+                    rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     response.status = true;
                     response.message = "Note created";
                     response.data = userNote;
@@ -58,7 +59,7 @@ exports.getNotes = (req, res) => {
         var body = {
             'userid': req.decoded.payload.user_id
         }
-       
+
         rediscache.redisgetNotes(body.userid, (err, result) => {
             if (result) {
                 // console.log(result, "redis result");
@@ -83,7 +84,7 @@ exports.getNotes = (req, res) => {
                     } else {
 
                         response.message = 'unable to get notes, it may be invalid user id',
-                        response.result = error
+                            response.result = error
                         return res.status(500).send(response)
                         // res.status(500).send({
                         //     message: 'unable to get notes, it may be invalid user id',
@@ -262,18 +263,17 @@ exports.updateColor = (req, res) => {
             var responseResult = {}
             var noteID = req.body.noteID;
             var color = req.body.color;
-            noteService.updateColor(noteID, color, (err, result) => {
-                if (err) {
-                    responseResult.status = false;
-                    responseResult.error = err;
-                    res.status(500).send(responseResult)
-                } else {
+            noteService.updateColor(noteID, color)
+                .then(result => {
                     rediscache.deleteRedisNotes(req.decoded.payload.user_id)
                     responseResult.status = true;
                     responseResult.data = result;
                     res.status(200).send(responseResult)
-                }
-            })
+                }).catch(err => {
+                    responseResult.status = false;
+                    responseResult.error = err;
+                    res.status(500).send(responseResult)
+                })
         }
     } catch (error) {
         res.send(error)
