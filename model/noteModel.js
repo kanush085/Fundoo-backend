@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 var noteSchema = new mongoose.Schema({
     userId: {
@@ -38,10 +39,15 @@ var noteSchema = new mongoose.Schema({
             type: String,
             ref: "labelSchema"
         }
-    ]
+    ],
+    index: {
+        type: Number
+    }
+
 }, {
         timestamps: true
     });
+noteSchema.plugin(AutoIncrement, { inc_field: 'index' });
 var note = mongoose.model('Note', noteSchema);
 function noteModel() { }
 /**
@@ -50,7 +56,7 @@ function noteModel() { }
  * @param {*response to backend} callback 
  */
 noteModel.prototype.addNotes = (objectNote, callback) => {
-   
+
     const noteModel = new note(objectNote.body);
     console.log("data==================>", objectNote.body);
     //To save the data in dbs
@@ -72,7 +78,7 @@ noteModel.prototype.addNotes = (objectNote, callback) => {
  */
 noteModel.prototype.getNotes = (body, callback) => {
     // console.log("hjjjjjjjjjjjj",body.userid);
-    
+
     note.find({
         userId: body.userid
 
@@ -413,7 +419,7 @@ noteModel.prototype.saveLabel = (noteID, noteLabel, callBack) => {
 
 noteModel.prototype.deleteNoteLabel = (noteID, deletelabel, callBack) => {
     // console.log("jhdkjhdhj",noteID,">>>>>>>>>>>>>>>>>",deletelabel);
-    
+
     note.findOneAndUpdate({
         _id: noteID
     }, {
@@ -426,19 +432,17 @@ noteModel.prototype.deleteNoteLabel = (noteID, deletelabel, callBack) => {
                 callBack(err)
             } else {
 
-                let newArray=result.label
+                let newArray = result.label
                 // console.log("new Array",newArray);
 
-                for(i=0;i<= newArray.length;i++)
-                {
-                    if(newArray[i]===deletelabel)
-                    {
-                        newArray.splice(i,1)
+                for (i = 0; i <= newArray.length; i++) {
+                    if (newArray[i] === deletelabel) {
+                        newArray.splice(i, 1)
                     }
                 }
                 console.log(newArray);
-                
-                
+
+
                 return callBack(null, newArray)
             }
         })

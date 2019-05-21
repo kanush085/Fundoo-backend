@@ -37,18 +37,26 @@ app.use('/', route);
 app.get('/', (req, res) => {
     res.json({ "message": "welcome to FundooNotes application. Take notes quickly, organize and keep track of all your notes" });
 });
+console.log("test ",  process.env.NODE_ENV )
+ var env = process.env.NODE_ENV || 'local';
+ var dbConfig = require('./config/' +env);
 require('dotenv').config()
 app.listen(3000, function () {
     console.log("server is connected");
     console.log("Server is listening on port 3000");
 })
-const dbConfig = require('./config/config');
+
+
+
+//const dbConfig = require('./config/config');
+
+
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
 
-mongoose.connect(dbConfig.url, {
+mongoose.connect(dbConfig.config.url, {
     useNewUrlParser: true
 }).then(() => {
     console.log("Sucessfully connected to the database");

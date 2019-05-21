@@ -1,11 +1,5 @@
 const noteService = require('../services/noteService');
 const rediscache = require('../redisCache')
-// const redis = require('redis');
-// const client = redis.createClient();
-// client.on('error', (err) => {
-//     console.log("Error " + err);
-// });
-
 /**
  * @description:it handles the creating note data
  * @param {*request from frontend} req 
@@ -86,10 +80,6 @@ exports.getNotes = (req, res) => {
                         response.message = 'unable to get notes, it may be invalid user id',
                             response.result = error
                         return res.status(500).send(response)
-                        // res.status(500).send({
-                        //     message: 'unable to get notes, it may be invalid user id',
-                        //     result: error
-                        // })
 
                     }
                 })
@@ -139,11 +129,9 @@ exports.getNotes = (req, res) => {
  * @param {*response from backend} res 
  */
 exports.isArchived = (req, res) => {
-    // console.log("controller",req);
-
     try {
         req.checkBody('noteID', 'noteID required').not().isEmpty();
-        // req.checkBody('archive', 'archive required').not().isEmpty();
+      
         var errors = req.validationErrors();
         var response = {};
         if (errors) {
@@ -154,7 +142,6 @@ exports.isArchived = (req, res) => {
             var responseResult = {};
             noteID = req.body.noteID;
             archive = req.body.archive;
-            // console.log(archive)
             noteService.isArchived(noteID, archive, (err, result) => {
                 if (err) {
                     responseResult.status = false;
